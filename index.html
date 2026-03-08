@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>RENGESH - QUANT | Engineering Alpha</title>
+    <!-- Tailwind CSS v3 CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Google Fonts for a tech/monospaced feel -->
+    <link rel="stylesheet" href="fonts.css" />
+
+    <style data-purpose="base-configuration">
+        :root {
+            --neon-green: #00FF94;
+            --bg-dark: #0A0F14;
+            --grid-color: rgba(0, 255, 148, 0.05);
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #E2E8F0;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .text-neon {
+            color: var(--neon-green);
+        }
+
+        .bg-neon {
+            background-color: var(--neon-green);
+        }
+
+        .border-neon {
+            border-color: var(--neon-green);
+        }
+
+        body,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p,
+        span,
+        div,
+        li {
+            cursor: default;
+        }
+
+        a,
+        button,
+        [role='button'],
+        .cursor-pointer {
+            cursor: pointer !important;
+        }
+    </style>
+    <style data-purpose="grid-background">
+        /* Global grid background overlay */
+        .grid-overlay {
+            background-size: 40px 40px;
+            background-image:
+                linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+        }
+    </style>
+    <style data-purpose="custom-utilities">
+        .glow-hover:hover {
+            box-shadow: 0 0 15px rgba(0, 255, 148, 0.4);
+        }
+
+        .status-badge::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: var(--neon-green);
+            border-radius: 50%;
+            margin-right: 8px;
+            box-shadow: 0 0 8px var(--neon-green);
+        }
+
+        .monaco-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
+    </style>
+    <link rel="stylesheet" href="fonts.css" />
+    <style>
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        .terminal-cursor {
+            animation: blink 1s step-end infinite;
+        }
+    </style>
+    <style>
+        @keyframes hero-float-pulse {
+
+            0%,
+            100% {
+                transform: translateY(0);
+                box-shadow: 0 0 15px 2px rgba(0, 255, 148, 0.2);
+            }
+
+            50% {
+                transform: translateY(-20px);
+                box-shadow: 0 0 30px 8px rgba(0, 255, 148, 0.4);
+            }
+        }
+
+        .hero-visual-anim {
+            animation: hero-float-pulse 6s ease-in-out infinite;
+        }
+    </style>
+    <style>
+        .hero-zoom-target {
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .hero-visual-container:hover .hero-zoom-target {
+            transform: scale(1.15);
+        }
+    </style>
+    <style>
+        .nav-link-hover {
+            position: relative;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .nav-link-hover:hover {
+            color: var(--neon-green);
+            text-shadow: 0 0 8px rgba(0, 255, 148, 0.5);
+        }
+
+        .nav-link-hover::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background-color: var(--neon-green);
+            transition: width 0.3s ease;
+            box-shadow: 0 0 5px var(--neon-green);
+        }
+
+        .nav-link-hover:hover::after {
+            width: 100%;
+        }
+    </style>
+    <script>function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const isOpen = !menu.classList.contains('translate-x-full');
+            if (isOpen) {
+                menu.classList.add('translate-x-full');
+                document.body.style.overflow = 'auto';
+            } else {
+                menu.classList.remove('translate-x-full');
+                document.body.style.overflow = 'hidden';
+            }
+        }</script>
+</head>
+
+<body class="antialiased">
+    <div class="grid-overlay"></div>
+    <!-- BEGIN: Navigation -->
+    <nav
+        class="fixed top-0 left-0 w-full z-50 bg-[#0A0F14]/80 backdrop-blur-md border-b border-white/5 py-4 px-6 md:px-12 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <div class="w-6 h-6 border-2 border-neon flex items-center justify-center"><span
+                    class="text-neon text-[10px] font-bold leading-none flex items-center justify-center pt-0.5">&gt;<span
+                        class="terminal-cursor">_</span></span></div>
+            <span class="font-bold tracking-tighter text-lg">RENGESH-<span class="text-neon">QUANT</span></span>
+        </div>
+        <button class="md:hidden text-slate-400 hover:text-neon transition-colors" onclick="toggleMobileMenu()">
+            <span class="material-symbols-outlined text-3xl">menu</span>
+        </button>
+        <div
+            class="hidden md:flex items-center gap-8 text-[10px] uppercase tracking-[0.2em] font-medium text-slate-400">
+            <a class="nav-link-hover transition-colors" href="#">// HOME</a>
+            <a class="nav-link-hover transition-colors" href="#about">// ABOUT</a>
+            <a class="nav-link-hover transition-colors" href="#projects">// PROJECTS</a>
+            <a class="nav-link-hover transition-colors" href="#contact">// CONTACT</a>
+        </div>
+        <a class="text-[10px] border border-slate-700 px-4 py-1.5 hover:border-neon hover:text-neon transition-all"
+            href="https://mail.google.com/mail/?view=cm&fs=1&to=rengesh.official@gmail.com&su=Access%20Request:%20Rengesh%20Quant%20CV"
+            target="_blank" rel="noopener noreferrer">RESUME</a>
+    </nav>
+    <!-- END: Navigation -->
+    <main>
+        <!-- BEGIN: Hero Section -->
+        <section class="min-h-screen pt-32 pb-20 px-6 md:px-12 max-w-7xl mx-auto flex flex-col justify-center">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div data-purpose="hero-content">
+                    <div class="status-badge text-[10px] uppercase tracking-widest text-neon mb-6">
+                        Available for Summer Internships
+                    </div>
+                    <h1 class="text-5xl md:text-7xl font-extrabold leading-[1.1] mb-8">
+                        Engineering <span class="text-neon italic">Alpha</span><br />
+                        through Mathematics.
+                    </h1>
+                    <p class="text-slate-400 max-w-lg text-sm md:text-base leading-relaxed mb-10 monaco-font">
+                        Bridging the gap between mathematical theory and algorithmic execution. Currently focused on
+                        high-frequency market making, risk modeling, and stochastic calculus.
+                    </p>
+                    <div class="flex flex-wrap items-center gap-6">
+                        <a href="#contact">
+                            <button
+                                class="bg-neon text-black font-bold text-xs px-8 py-4 uppercase tracking-widest glow-hover transition-all">
+                                Initialize Connection
+                            </button>
+                        </a>
+                    </div>
+                </div>
+                <div class="relative" data-purpose="hero-visual">
+                    <div
+                        class="aspect-square bg-[#1A2026] p-8 rounded-lg border border-white/5 flex items-center justify-center hero-visual-container overflow-hidden">
+                        <!-- Placeholder for Dashboard snippet image -->
+                        <img alt="Mathematical Model Visualization"
+                            class="w-full h-auto shadow-2xl rounded opacity-80 mix-blend-screen grayscale contrast-125 hero-visual-anim hero-zoom-target"
+                            src="imgs/hero_Section_Ball_Img.png" />
+                    </div>
+                    <!-- Decorative accents -->
+                    <div class="absolute -top-4 -right-4 w-24 h-24 border-t border-r border-neon/30"></div>
+                    <div class="absolute -bottom-4 -left-4 w-24 h-24 border-b border-l border-neon/30"></div>
+                </div>
+            </div>
+            <!-- Quick Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mt-24 border-t border-white/5 pt-12">
+                <div data-purpose="stat-block">
+                    <div class="text-[10px] text-slate-500 uppercase tracking-widest mb-1">Core Language</div>
+                    <div class="text-xl font-bold">C++ 20</div>
+                </div>
+                <div data-purpose="stat-block">
+                    <div class="text-[10px] text-slate-500 uppercase tracking-widest mb-1">Data Science</div>
+                    <div class="text-xl font-bold">Python/R</div>
+                </div>
+                <div data-purpose="stat-block">
+                    <div class="text-[10px] text-slate-500 uppercase tracking-widest mb-1">Latency</div>
+                    <div class="text-xl font-bold">&lt;10μs</div>
+                </div>
+                <div data-purpose="stat-block">
+                    <div class="text-[10px] text-slate-500 uppercase tracking-widest mb-1">Status</div>
+                    <div class="text-xl font-bold text-neon">ACTIVE</div>
+                </div>
+            </div>
+        </section>
+        <!-- END: Hero Section -->
+        <!-- BEGIN: About Section -->
+        <section class="py-24 px-6 md:px-12 max-w-7xl mx-auto border-t border-white/5" id="about">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-16">
+                <div>
+                    <div class="text-neon text-[10px] mb-4">// ABOUT</div>
+                    <h2 class="text-4xl font-bold leading-tight">Quantitative<br />Journey</h2>
+                </div>
+                <div class="md:col-span-2 space-y-6 text-slate-400 text-sm leading-relaxed monaco-font">
+                    <div class="md:col-span-2 space-y-6 text-slate-400 text-sm leading-relaxed monaco-font">
+                        <p>
+                            "My journey into quantitative engineering began at the intersection of finance and math.
+                            Coming from a family with a background in the finance industry and a rigorous academic
+                            foundation,
+                            I was fascinated by how mathematical abstractions can govern chaotic market dynamics.
+                            Since then, I have dedicated my academic and personal projects to building robust
+                            algorithmic
+                            frameworks."
+                        </p>
+
+                        <p>
+                            With a foundation in pure mathematics and a passion for high-performance computing, I
+                            specialize in
+                            developing C++ based execution engines and Python-driven research pipelines. I believe that
+                            true alpha is
+                            found in the rigorous application of the scientific method to financial data, seeking out
+                            market
+                            inefficiencies through statistical precision and technological speed.
+                        </p>
+
+                        <div class="text-neon text-[10px] mb-2 uppercase tracking-widest">
+                            Currently, I am navigating the overlapping fields of theoretical physics, actuarial science,
+                            and
+                            quantitative finance.
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-6">
+                            <div>
+                                <div class="text-neon text-[10px] mb-2 uppercase tracking-widest">Focus</div>
+                                <p class="text-xs">Market Making, Statistical Arbitrage, &amp; High-Frequency Trading.
+                                </p>
+                            </div>
+                            <div>
+                                <div class="text-neon text-[10px] mb-2 uppercase tracking-widest">Philosophy</div>
+                                <p class="text-xs">Code is the medium, mathematics is the message.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </section><!-- BEGIN: Competencies Section -->
+        <section class="py-24 px-6 md:px-12 max-w-7xl mx-auto border-t border-white/5" id="competencies">
+            <div class="text-neon text-[10px] mb-4 uppercase tracking-[0.2em]">// Core_Competencies</div>
+            <h2 class="text-4xl font-bold mb-16">Specialized Expertise</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Card 1 -->
+                <div
+                    class="group border border-white/5 bg-[#0D1218] p-8 hover:border-neon/30 transition-all duration-300">
+                    <div class="mb-6">
+                        <span class="material-symbols-outlined text-neon text-3xl">analytics</span>
+                    </div>
+                    <h3 class="text-lg font-bold mb-4">Quantitative Research</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed monaco-font">
+                        Alpha signal extraction, backtesting frameworks, and statistical arbitrage strategies.
+                    </p>
+                </div>
+                <!-- Card 2 -->
+                <div
+                    class="group border border-white/5 bg-[#0D1218] p-8 hover:border-neon/30 transition-all duration-300">
+                    <div class="mb-6">
+                        <span class="material-symbols-outlined text-neon text-3xl">bolt</span>
+                    </div>
+                    <h3 class="text-lg font-bold mb-4">Algorithmic Execution</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed monaco-font">
+                        High-frequency order management and low-latency execution engines.
+                    </p>
+                </div>
+                <!-- Card 3 -->
+                <div
+                    class="group border border-white/5 bg-[#0D1218] p-8 hover:border-neon/30 transition-all duration-300">
+                    <div class="mb-6">
+                        <span class="material-symbols-outlined text-neon text-3xl">security</span>
+                    </div>
+                    <h3 class="text-lg font-bold mb-4">Risk Management</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed monaco-font">
+                        Monte Carlo VaR engines, dynamic hedging, and real-time exposure monitoring.
+                    </p>
+                </div>
+                <!-- Card 4 -->
+                <div
+                    class="group border border-white/5 bg-[#0D1218] p-8 hover:border-neon/30 transition-all duration-300">
+                    <div class="mb-6">
+                        <span class="material-symbols-outlined text-neon text-3xl">database</span>
+                    </div>
+                    <h3 class="text-lg font-bold mb-4">Data Engineering</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed monaco-font">
+                        Architecting pipelines for tick data ingestion and distributed computing.
+                    </p>
+                </div>
+            </div>
+        </section>
+        <!-- END: Competencies Section -->
+        <!-- END: About Section -->
+        <!-- BEGIN: Projects Section -->
+        <section class="py-24 px-6 md:px-12 max-w-7xl mx-auto" id="projects">
+            <div class="text-neon text-[10px] mb-4">// PORTFOLIO</div>
+            <h2 class="text-4xl font-bold mb-16">Featured Models</h2>
+            <div class="space-y-32">
+                <!-- Project 1: Risk Engine -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div
+                        class="order-2 lg:order-1 rounded-xl overflow-hidden border border-white/10 bg-black/40 p-1 group cursor-pointer">
+                        <!-- Updated Sophisticated Risk Image -->
+                        <img alt="Portfolio Risk &amp; Monte Carlo VaR Engine Visual"
+                            class="w-full h-auto grayscale-50 hover:grayscale-0 transition-all duration-500 transition-transform duration-500 ease-in-out group-hover:scale-110"
+                            src="imgs/monte_Carlo_Featured_Image.png" />
+                    </div>
+                    <div class="order-1 lg:order-2 group cursor-pointer">
+                        <h3 class="text-3xl font-bold mb-4">Portfolio Risk &amp; Monte Carlo VaR Engine</h3>
+                        <div
+                            class="flex flex-wrap gap-2 text-[10px] mb-6 text-neon font-bold uppercase tracking-widest">
+                            <span>Python</span> / <span>NumPy</span> / <span>SciPy</span> / <span>Pandas</span>
+                        </div>
+                        <p class="text-slate-400 text-sm mb-8 leading-relaxed monaco-font">
+                            A quantitative risk engine that simulates tens of thousands of stochastic price paths to
+                            calculate Value at Risk (VaR) and Expected Shortfall (CVaR) for multi-asset portfolios.
+                            Built to assess non-linear portfolio payoffs under severe market stress scenarios.
+                        </p>
+                        <ul class="space-y-2 mb-8 text-[11px] monaco-font">
+                            <li><span class="text-neon">01.</span> Stochastic path generation via Geometric Brownian
+                                Motion</li>
+                            <li><span class="text-neon">02.</span> Historical and parametric VaR/CVaR computation</li>
+                            <li><span class="text-neon">03.</span> Implementation of variance reduction techniques</li>
+                        </ul>
+                        <a class="text-xs font-bold flex items-center gap-2 group text-neon uppercase tracking-widest"
+                            href="wip.html">
+                            View on Github
+                            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none"
+                                stroke="currentColor" viewbox="0 0 24 24">
+                                <path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <!-- Project 2: Options Pricing -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div class="group cursor-pointer">
+                        <h3 class="text-3xl font-bold mb-4">Options Mispricing &amp; Volatility Surface Engine</h3>
+                        <div
+                            class="flex flex-wrap gap-2 text-[10px] mb-6 text-neon font-bold uppercase tracking-widest">
+                            <span>Python</span> / <span>Scipy</span> / <span>Black-Scholes</span> /
+                            <span>Matplotlib</span>
+                        </div>
+                        <p class="text-slate-400 text-sm mb-8 leading-relaxed monaco-font">
+                            An advanced derivatives pricing model that constructs 3D implied volatility surfaces from
+                            raw options chain data. Designed to identify local mispricings and volatility skews using
+                            numerical interpolation and rigorous calculation of the Black-Scholes Greeks.
+                        </p>
+                        <ul class="space-y-2 mb-8 text-[11px] monaco-font">
+                            <li><span class="text-neon">01.</span> Implied volatility root-finding (Newton-Raphson
+                                method)</li>
+                            <li><span class="text-neon">02.</span> Cubic spline interpolation for surface construction
+                            </li>
+                            <li><span class="text-neon">03.</span> Delta-neutral hedging metrics and Greeks calculation
+                            </li>
+                        </ul>
+                        <a class="text-xs font-bold flex items-center gap-2 group text-neon uppercase tracking-widest"
+                            href="wip.html">
+                            View on Github
+                            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none"
+                                stroke="currentColor" viewbox="0 0 24 24">
+                                <path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"></path>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="rounded-xl overflow-hidden border border-white/10 bg-black/40 p-1 group cursor-pointer">
+                        <img alt="Volatility Surface Visualization"
+                            class="w-full h-auto grayscale-50 hover:grayscale-0 transition-all duration-500 transition-transform duration-500 ease-in-out group-hover:scale-110"
+                            src="imgs/options_Pricing_Image.png" />
+                    </div>
+                </div>
+                <!-- Project 3: Market Regime Detection -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center group cursor-pointer">
+                    <div
+                        class="order-2 lg:order-1 rounded-xl overflow-hidden border border-white/10 bg-black/40 p-1 group cursor-pointer">
+                        <img alt="Regime Detection Visualization"
+                            class="w-full h-auto grayscale-50 hover:grayscale-0 transition-all duration-500 transition-transform duration-500 ease-in-out group-hover:scale-110"
+                            src="imgs/market_Regime_Image.png" />
+                    </div>
+                    <div class="order-1 lg:order-2 group cursor-pointer">
+                        <h3 class="text-3xl font-bold mb-4">Market Regime Detection Engine</h3>
+                        <div
+                            class="flex flex-wrap gap-2 text-[10px] mb-6 text-neon font-bold uppercase tracking-widest">
+                            <span>Python</span> / <span>Scikit-Learn</span> / <span>Statsmodels</span> /
+                            <span>Pandas</span>
+                        </div>
+                        <p class="text-slate-400 text-sm mb-8 leading-relaxed monaco-font">
+                            A statistical inference model built to identify underlying structural shifts in market
+                            volatility and return distributions. Utilizes unsupervised machine learning algorithms to
+                            classify distinct market phases, allowing for dynamic, regime-aware risk adjustments.
+                        </p>
+                        <ul class="space-y-2 mb-8 text-[11px] monaco-font">
+                            <li><span class="text-neon">01.</span> Hidden Markov Models (HMM) for unobserved state
+                                classification</li>
+                            <li><span class="text-neon">02.</span> Gaussian Mixture Models for distribution clustering
+                            </li>
+                            <li><span class="text-neon">03.</span> Dynamic portfolio weighting based on detected regime
+                                shifts</li>
+                        </ul>
+                        <a class="text-xs font-bold flex items-center gap-2 group text-neon uppercase tracking-widest"
+                            href="wip.html">
+                            View on Github
+                            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none"
+                                stroke="currentColor" viewbox="0 0 24 24">
+                                <path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- END: Projects Section -->
+        <!-- BEGIN: Other Repositories -->
+        <section class="py-24 px-6 md:px-12 max-w-7xl mx-auto border-t border-white/5">
+            <div class="text-slate-400 text-[10px] mb-12 font-bold tracking-[0.2em]">// Other_Repositories</div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Repo Card 1 -->
+                <a href="wip.html"
+                    class="group border border-white/5 bg-[#0D1218] p-6 flex items-center justify-between hover:border-neon/30 transition-all cursor-pointer hover:scale-[1.02] duration-300">
+                    <div class="flex items-center gap-4">
+                        <svg class="w-5 h-5 text-slate-500 group-hover:text-neon transition-colors" fill="none"
+                            stroke="currentColor" viewbox="0 0 24 24">
+                            <path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
+                                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                        </svg>
+                        <span
+                            class="text-xs font-bold text-slate-300 monaco-font">Mixed-Integer-Portfolio-Optimizer</span>
+                    </div>
+                    <svg class="w-4 h-4 text-slate-600 group-hover:text-neon transition-colors" fill="none"
+                        stroke="currentColor" viewbox="0 0 24 24">
+                        <path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                </a>
+                <!-- Repo Card 2 -->
+                <a href="wip.html"
+                    class="group border border-white/5 bg-[#0D1218] p-6 flex items-center justify-between hover:border-neon/30 transition-all cursor-pointer hover:scale-[1.02] duration-300">
+                    <div class="flex items-center gap-4">
+                        <svg class="w-5 h-5 text-slate-500 group-hover:text-neon transition-colors" fill="none"
+                            stroke="currentColor" viewbox="0 0 24 24">
+                            <path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
+                                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                        </svg>
+                        <span class="text-xs font-bold text-slate-300 monaco-font">Copula-Tail-Risk-Model</span>
+                    </div>
+                    <svg class="w-4 h-4 text-slate-600 group-hover:text-neon transition-colors" fill="none"
+                        stroke="currentColor" viewbox="0 0 24 24">
+                        <path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                </a>
+                <!-- Repo Card 3 -->
+                <a href="wip.html"
+                    class="group border border-white/5 bg-[#0D1218] p-6 flex items-center justify-between hover:border-neon/30 transition-all cursor-pointer hover:scale-[1.02] duration-300">
+                    <div class="flex items-center gap-4">
+                        <svg class="w-5 h-5 text-slate-500 group-hover:text-neon transition-colors" fill="none"
+                            stroke="currentColor" viewbox="0 0 24 24">
+                            <path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
+                                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                        </svg>
+                        <span class="text-xs font-bold text-slate-300 monaco-font">Hawkes-LOB-Simulator</span>
+                    </div>
+                    <svg class="w-4 h-4 text-slate-600 group-hover:text-neon transition-colors" fill="none"
+                        stroke="currentColor" viewbox="0 0 24 24">
+                        <path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                </a>
+                <!-- Repo Card 4 -->
+                <a href="wip.html"
+                    class="group border border-white/5 bg-[#0D1218] p-6 flex items-center justify-between hover:border-neon/30 transition-all cursor-pointer hover:scale-[1.02] duration-300">
+                    <div class="flex items-center gap-4">
+                        <svg class="w-5 h-5 text-slate-500 group-hover:text-neon transition-colors" fill="none"
+                            stroke="currentColor" viewbox="0 0 24 24">
+                            <path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
+                                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                        </svg>
+                        <span
+                            class="text-xs font-bold text-slate-300 monaco-font">Delta-Neutral-Funding-Harvester</span>
+                    </div>
+                    <svg class="w-4 h-4 text-slate-600 group-hover:text-neon transition-colors" fill="none"
+                        stroke="currentColor" viewbox="0 0 24 24">
+                        <path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                </a>
+            </div>
+        </section>
+        <section class="py-24 px-6 md:px-12 max-w-7xl mx-auto border-t border-white/5">
+            <div class="text-slate-400 text-[10px] mb-12 font-bold tracking-[0.2em]">// Other_Repositories(LLM Powered)
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Repo Card 1 -->
+                <a href="wip.html"
+                    class="group border border-white/5 bg-[#0D1218] p-6 flex items-center justify-between hover:border-neon/30 transition-all cursor-pointer hover:scale-[1.02] duration-300">
+                    <div class="flex items-center gap-4">
+                        <svg class="w-5 h-5 text-slate-500 group-hover:text-neon transition-colors" fill="none"
+                            stroke="currentColor" viewbox="0 0 24 24">
+                            <path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
+                                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                        </svg>
+                        <span class="text-xs font-bold text-slate-300 monaco-font">LSTM-Volatility-Forecaster</span>
+                    </div>
+                    <svg class="w-4 h-4 text-slate-600 group-hover:text-neon transition-colors" fill="none"
+                        stroke="currentColor" viewbox="0 0 24 24">
+                        <path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                </a>
+                <!-- Repo Card 2 -->
+                <a href="wip.html"
+                    class="group border border-white/5 bg-[#0D1218] p-6 flex items-center justify-between hover:border-neon/30 transition-all cursor-pointer hover:scale-[1.02] duration-300">
+                    <div class="flex items-center gap-4">
+                        <svg class="w-5 h-5 text-slate-500 group-hover:text-neon transition-colors" fill="none"
+                            stroke="currentColor" viewbox="0 0 24 24">
+                            <path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
+                                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                        </svg>
+                        <span class="text-xs font-bold text-slate-300 monaco-font">Yield Curve Fitting (Nelson
+                            Siegel)</span>
+                    </div>
+                    <svg class="w-4 h-4 text-slate-600 group-hover:text-neon transition-colors" fill="none"
+                        stroke="currentColor" viewbox="0 0 24 24">
+                        <path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                </a>
+                <!-- Repo Card 3 -->
+                <a href="wip.html"
+                    class="group border border-white/5 bg-[#0D1218] p-6 flex items-center justify-between hover:border-neon/30 transition-all cursor-pointer hover:scale-[1.02] duration-300">
+                    <div class="flex items-center gap-4">
+                        <svg class="w-5 h-5 text-slate-500 group-hover:text-neon transition-colors" fill="none"
+                            stroke="currentColor" viewbox="0 0 24 24">
+                            <path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
+                                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                        </svg>
+                        <span class="text-xs font-bold text-slate-300 monaco-font">Bayesian-HSMM-Regimes</span>
+                    </div>
+                    <svg class="w-4 h-4 text-slate-600 group-hover:text-neon transition-colors" fill="none"
+                        stroke="currentColor" viewbox="0 0 24 24">
+                        <path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                </a>
+                <!-- Repo Card 4 -->
+                <a href="wip.html"
+                    class="group border border-white/5 bg-[#0D1218] p-6 flex items-center justify-between hover:border-neon/30 transition-all cursor-pointer hover:scale-[1.02] duration-300">
+                    <div class="flex items-center gap-4">
+                        <svg class="w-5 h-5 text-slate-500 group-hover:text-neon transition-colors" fill="none"
+                            stroke="currentColor" viewbox="0 0 24 24">
+                            <path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
+                                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                        </svg>
+                        <span class="text-xs font-bold text-slate-300 monaco-font">AI Liquidity Universe</span>
+                    </div>
+                    <svg class="w-4 h-4 text-slate-600 group-hover:text-neon transition-colors" fill="none"
+                        stroke="currentColor" viewbox="0 0 24 24">
+                        <path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                </a>
+            </div>
+        </section>
+        <!-- END: Other Repositories -->
+        <!-- BEGIN: Contact/CTA -->
+        <section class="py-32 px-6 text-center max-w-3xl mx-auto" id="contact">
+            <h2 class="text-5xl md:text-7xl font-extrabold uppercase mb-6 tracking-tighter">
+                STAY <span class="text-neon italic">SYNCHRONIZED.</span>
+            </h2>
+            <p class="text-slate-400 mb-16 monaco-font text-sm">
+                Open for research collaborations, trading discussions,<br />
+                and internship opportunities in quantitative finance.
+            </p>
+            <div class="flex justify-center gap-12">
+                <a class="group cursor-pointer" href="https://github.com/Itz-rengesh" target="_blank"
+                    rel="noopener noreferrer">
+                    <div
+                        class="w-14 h-14 border border-slate-800 rounded-full flex items-center justify-center mb-2 group-hover:border-neon transition-all">
+                        <svg class="w-6 h-6 text-slate-400 group-hover:text-neon" fill="none" stroke="currentColor"
+                            viewbox="0 0 24 24">
+                            <path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" stroke-linecap="round"
+                                stroke-linejoin="round" stroke-width="2"></path>
+                        </svg>
+                    </div>
+                    <div class="text-[10px] uppercase font-bold text-slate-500 group-hover:text-neon">Github</div>
+                </a>
+
+                <a class="group cursor-pointer" href="https://www.linkedin.com/in/srirengeshwar" target="_blank"
+                    rel="noopener noreferrer">
+                    <div
+                        class="w-14 h-14 border border-slate-800 rounded-full flex items-center justify-center mb-2 group-hover:border-neon transition-all">
+                        <svg class="w-6 h-6 text-slate-400 group-hover:text-neon" fill="none" stroke="currentColor"
+                            viewbox="0 0 24 24">
+                            <path
+                                d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+                                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                        </svg>
+                    </div>
+                    <div class="text-[10px] uppercase font-bold text-slate-500 group-hover:text-neon">LinkedIn</div>
+                </a> <a class="group cursor-pointer" href="mailto:rengesh.official@gmail.com">
+                    <div
+                        class="w-14 h-14 border border-slate-800 rounded-full flex items-center justify-center mb-2 group-hover:border-neon transition-all">
+                        <svg class="w-6 h-6 text-slate-400 group-hover:text-neon" fill="none" stroke="currentColor"
+                            viewbox="0 0 24 24">
+                            <path
+                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                        </svg>
+                    </div>
+                    <div class="text-[10px] uppercase font-bold text-slate-500 group-hover:text-neon">Mail Me</div>
+                </a>
+            </div>
+        </section>
+        <!-- END: Contact/CTA -->
+    </main>
+    <!-- BEGIN: Footer -->
+    <footer class="py-12 px-6 md:px-12 border-t border-white/5 bg-[#080C10]">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 items-center gap-8">
+            <div class="text-[9px] uppercase tracking-widest text-slate-600 monaco-font text-center md:col-start-2">
+                Built with precision / Low Latency Design / 0x01
+            </div>
+            <div class="flex items-center justify-center md:justify-end gap-2 text-[10px] font-bold md:col-start-3">
+                <div class="w-4 h-4 border border-neon flex items-center justify-center">
+                    <div class="w-2 h-2 bg-neon"></div>
+                </div>
+                <span class="text-slate-500">QUANT <span class="text-slate-600">© 2026</span></span>
+            </div>
+        </div>
+    </footer>
+    <!-- END: Footer -->
+    <div class="fixed inset-y-0 right-0 z-[100] w-full md:w-[400px] bg-[#0A0F14] flex flex-col items-center justify-center transform translate-x-full transition-transform duration-300 ease-in-out border-l border-white/5"
+        id="mobile-menu">
+        <div class="grid-overlay"></div>
+        <button
+            class="absolute top-6 right-6 w-12 h-12 border border-slate-800 flex items-center justify-center hover:border-neon text-slate-400 hover:text-neon transition-all"
+            onclick="toggleMobileMenu()">
+            <span class="material-symbols-outlined text-3xl">close</span>
+        </button>
+        <div class="flex flex-col items-center gap-10 text-center">
+            <div class="flex items-center gap-2 mb-8">
+                <div class="w-8 h-8 border-2 border-neon flex items-center justify-center"><span
+                        class="text-neon text-xs font-bold">&gt;<span class="terminal-cursor">_</span></span></div>
+                <span class="font-bold tracking-tighter text-2xl">RENGESH-<span class="text-neon">QUANT</span></span>
+            </div>
+            <nav class="flex flex-col gap-8 text-sm uppercase tracking-[0.3em] font-medium text-slate-400">
+                <a class="nav-link-hover text-2xl" href="#" onclick="toggleMobileMenu()">// HOME</a>
+                <a class="nav-link-hover text-2xl" href="#about" onclick="toggleMobileMenu()">// ABOUT</a>
+                <a class="nav-link-hover text-2xl" href="#projects" onclick="toggleMobileMenu()">// PROJECTS</a>
+                <a class="nav-link-hover text-2xl" href="#contact" onclick="toggleMobileMenu()">// CONTACT</a>
+            </nav>
+            <div class="mt-12">
+                <a class="text-xs border border-neon text-neon px-10 py-4 hover:bg-neon hover:text-black transition-all font-bold tracking-widest uppercase"
+                    href="https://mail.google.com/mail/?view=cm&fs=1&to=rengesh.official@gmail.com&su=Access%20Request:%20Rengesh%20Quant%20CV"
+                    target="_blank" rel="noopener noreferrer" onclick="toggleMobileMenu()">RESUME</a>
+            </div>
+        </div>
+        <div class="absolute bottom-12 text-[10px] uppercase tracking-widest text-slate-600 monaco-font">
+            System Status: <span class="text-neon">Online</span>
+        </div>
+    </div>
+</body>
+
+</html>

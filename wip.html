@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Under Construction | RENGESH - QUANT</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="stylesheet" href="fonts.css" />
+    <style>
+        :root {
+            --neon-green: #00FF94;
+            --bg-dark: #0A0F14;
+            --grid-color: rgba(0, 255, 148, 0.05);
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #E2E8F0;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .text-neon {
+            color: var(--neon-green);
+        }
+
+        .grid-overlay {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, var(--grid-color) 1px, transparent 1px), linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body class="antialiased min-h-screen flex flex-col items-center justify-center p-6 text-center">
+    <div class="grid-overlay"></div>
+
+    <img src="imgs/robot-spanner.png" alt="Robot fixing code" class="w-48 h-48 mb-8 mx-auto opacity-80" />
+
+    <h1 class="text-3xl md:text-5xl font-bold mb-4 font-sans uppercase tracking-tighter"
+        style="font-family: 'Inter', sans-serif;">
+        <span class="text-neon">System</span> Update in Progress
+    </h1>
+
+    <p class="text-slate-400 mb-10 max-w-md mx-auto leading-relaxed">
+        This project is currently under active development. My algorithms are hard at work optimizing the code. Stay
+        tuned for deployment updates!
+    </p>
+
+    <a href="javascript:history.back()"
+        class="inline-block border border-neon text-neon px-8 py-3 hover:bg-neon hover:text-[#0A0F14] transition-all font-bold tracking-widest uppercase text-xs">
+        &lt; Return to Main Terminal
+    </a>
+</body>
+
+</html>
