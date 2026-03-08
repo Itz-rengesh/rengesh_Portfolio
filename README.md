@@ -1,5 +1,4 @@
 # rengesh-quant-portfolio
-To meet the requirements for a detailed repository description, you can use the following technical breakdown. It highlights the architecture, design philosophy, and the "Engineering Alpha" thesis of your portfolio.
 
 Repository Overview: RENGESH-QUANT
 This repository houses the source code for RENGESH-QUANT, a high-performance, single-page professional portfolio tailored for the quantitative finance industry. The project serves as a centralized hub for displaying advanced algorithmic models, risk engines, and derivatives pricing frameworks.
